@@ -1,0 +1,140 @@
+1.	Ans=6. At the first line, a is being initialized as a global variable. Function b refers to that same global viable a; and calls function c so as to assign a value to it. Function c takes up the value as local variable a, and returns as (a+2). This value is being thus assigned to the global variable a.
+Upon calling b once, the function initializes a as the global variable, and by calling function c, changes the value of a to 2.
+Upon calling b again, the same process is repeated, and the value of a is updated from 2 to 4.
+Upon calling b again, the same process is repeated again, and the value of a is updated to 6.
+
+2.	#Snippet_on_exception_handling:
+def file_length(file_name):
+    try:
+        file = open(file_name)
+        contents = file.read()
+        file.close()
+        print(len(contents))
+    
+    except FileNotFoundError:
+        print("File "+file_name+" not Found.")
+
+3.	#Snippet_on_inheritance:
+class Marsupial:
+    def __init__(self):
+        self.pouch = list()
+        
+    def put_in_pouch(self, item):
+        self.pouch.append(item)
+        
+    def pouch_contents(self):
+        print(self.pouch)
+
+class Kangaroo(Marsupial):
+    def __init__(self, x, y):
+        super().__init__()
+        self.x = x
+        self.y = y
+        
+    def jump(self, dx, dy):
+        self.x += dx
+        self.y += dy
+        
+    def __str__(self):
+        return f"I am a Kangaroo located at coordinates ({self.x},{self.y})"
+
+4.	#Snippet_on_recursion:
+def collatz(x):
+    print(x)
+    if x == 1:
+        return x
+    elif x % 2 == 0:
+        collatz(x//2)
+    else:
+        collatz(3*x+1)
+5.	#Snippet_on_recursive_binary
+def binary(n):
+    if n<0:
+        print("No negative number allowed.")
+        return -1
+    if n > 1:
+        binary(n // 2)
+    print(n % 2, end='')
+6.	#Snippet_on_ HTMLParser
+from html.parser import HTMLParser
+class HeadingParser(HTMLParser):
+    def __init__(self):
+        super().__init__()
+        self.indent = 0
+        self.inside_body = False
+    
+    def handle_starttag(self, tag, attrs):
+        if tag == 'body':
+            self.inside_body = True
+        elif tag in ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] and self.inside_body:
+            self.indent = int(tag[1]) - 1
+    
+    def endtagHandler(self, tag):
+        if tag in ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] and self.inside_body:
+            self.indent = 0
+        elif tag == 'body':
+            self.inside_body = False
+    
+    def handle_data(self, data):
+        if self.inside_body and data.strip() != '':
+            print((' ' * self.indent) + data.strip())
+            
+7.	#Snippet1_on_urlRequests:
+import re, urllib.request
+def webdir(url, depth, indent):
+    # Print the URL of the current page with appropriate indentation
+    print(" " * indent + url)
+    if depth == 0:
+        return
+    try:
+        with urllib.request.urlopen(url) as f:
+            content = f.read().decode('utf-8')
+        links = re.findall(r'<a\s+(?:[^>]*?\s+)?href="([^"]*)"', content)
+        if not links:
+            print(" " * (indent + 2) + "No links found on this page")
+            return
+        for link in links:
+            # Resolve relative links to absolute URLs
+            if not link.startswith("http"):
+                link = urllib.parse.urljoin(url, link)
+            # Recursively visit each link
+            webdir(link, depth - 1, indent + 2)
+    except:
+        pass
+
+
+#Snippet1_on_url_processing_as_string:
+
+
+8.	//SQL_queries
+a.	All the temperature data.
+SELECT Temperature FROM weather;
+
+b.	All the cities, but without repetition. 
+SELECT DISTINCT City FROM weather;
+
+c.	All the records for India. 
+SELECT * FROM weather WHERE Country = 'India';
+
+d.	All the Fall records.
+SELECT * FROM weather WHERE Season = 'Fall';
+
+e.	The city, country, and season for which the average rainfall is between 200 and 400 millimeters.
+SELECT City, Country, Season FROM weather WHERE Rainfall BETWEEN 200 AND 400 GROUP BY City, Country, Season;
+
+f.	The city and country for which the average Fall temperature is above 20 degrees, in increasing temperature order.
+SELECT City, Country FROM weather WHERE Season = 'Fall' GROUP BY City, Country HAVING AVG(Temperature) > 20 ORDER BY AVG(Temperature) ASC;
+
+g.	The total annual rainfall for Cairo. 
+SELECT SUM(Rainfall) AS TotalRainfall FROM weather WHERE City = 'Cairo';
+
+h.	The total rainfall for each season.
+SELECT Season, SUM(Rainfall) AS TotalRainfall FROM weather GROUP BY Season;
+9.	#list_comprehension
+[word.upper() for word in words]
+[word.lower() for word in words]
+[len(word) for word in words]
+[[word.upper(), word.lower(), len(word)] for word in words]
+[word for word in words if len(word) >= 4]
+
+
